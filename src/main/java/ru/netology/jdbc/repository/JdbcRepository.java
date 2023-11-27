@@ -2,35 +2,29 @@ package ru.netology.jdbc.repository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.stereotype.Repository;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-@org.springframework.stereotype.Repository
-public class Repository {
+@Repository
+public class JdbcRepository {
     @Autowired
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
 
-    public String getProduct(String name) {
+    public List<String> getProduct(String name) {
         Map<String, String> parametrs = new HashMap<>();
         parametrs.put("name", name);
-        String product = namedParameterJdbcTemplate.query("select product_name from orders o join customers c on c.id = o.customer_id where c.name = lower(:name)", parametrs, (rs) -> {
-            String nameProd = null;
-            if (rs.next()) {
-                nameProd = rs.getString("product_name");
-                System.out.println(nameProd);
-            }
-            return nameProd;
-        });
-        return product;
+        var sqlQuery = read("myScript.sql");
+        return namedParameterJdbcTemplate.queryForList(sqlQuery, parametrs, String.class);
     }
 
     private static String read(String scriptFileName) {
