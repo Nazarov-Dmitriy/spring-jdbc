@@ -8,7 +8,11 @@ import java.util.List;
 
 @Service
 public class JdbcServise {
-    private @Autowired JdbcRepository jdbcRepository;
+    final private JdbcRepository jdbcRepository;
+
+    public JdbcServise(JdbcRepository jdbcRepository) {
+        this.jdbcRepository = jdbcRepository;
+    }
 
     public List<String> getProduct(String name) {
         return jdbcRepository.getProduct(name);

@@ -16,9 +16,11 @@ import java.util.stream.Collectors;
 
 @Repository
 public class JdbcRepository {
-    @Autowired
-    private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
+    final private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
+    public JdbcRepository(NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
+        this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
+    }
 
     public List<String> getProduct(String name) {
         Map<String, String> parametrs = new HashMap<>();
